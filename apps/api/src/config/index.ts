@@ -106,7 +106,7 @@ export default config;
 export const isDev = process.env.NODE_ENV !== "production";
 
 // API Servers
-export const ivyiServers = [
+export const standoutServers = [
   {
     url: `http://localhost:${serverConfig.port}${serverConfig.endpoints.api}`,
     description: "Local development server",
