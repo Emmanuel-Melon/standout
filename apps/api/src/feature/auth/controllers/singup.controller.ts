@@ -7,6 +7,7 @@ import { asyncHandler } from "@/lib/express/express.async-handler";
 import { sendSuccessResponse } from "@/lib/express/express.response";
 import { HttpError } from "@/lib/http/http.error";
 import { HttpStatus } from "@/lib/http/http.status";
+import { logger } from "@/lib/logger";
 
 import { AuthJobs } from "../auth.config";
 import { setAuthCookies } from "../auth.cookies";
@@ -34,7 +35,7 @@ export const signupController = asyncHandler(
     const user = unwrap(await signupUser({ email, password, name, role }));
 
     if (!user) {
-      console.error("Signup failed", user);
+      logger.error({ user }, "Signup failed");
       throw new HttpError(HttpStatus.BAD_REQUEST, "Signup failed");
     }
 

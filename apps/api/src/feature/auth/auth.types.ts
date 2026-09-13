@@ -3,8 +3,15 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
 import { userRoleEnum, usersSchema } from "@/feature/users/users.schema";
+import {
+  createJsonApiResourceSchema,
+  createJsonApiSingleResponseSchema,
+} from "@/lib/express/express.serializer";
+import { baseQuerySchema } from "@/lib/express/express.types";
 import { crudMeta } from "@/lib/openapi/openapi.utils";
 
+import { usersSelectSchema } from "../users/users.types";
+import { AuthJobs } from "./auth.config";
 import { authEventsSchema, sessionsSchema } from "./auth.schema";
 
 /*
@@ -172,6 +179,11 @@ export const TokenGenerationArgsSchema = z.object({
   role: UserRoleSchema,
 });
 
+export const authEventQuerySchema = baseQuerySchema.extend({
+  eventType: z.string().optional(),
+  userId: z.string().optional(),
+});
+
 /*
  * DOMAIN-RELATED TYPES
  */
@@ -226,3 +238,68 @@ export type AuthEventColumn = typeof authEventsSchema._.columns;
 export type AuthEventColumnKey = keyof AuthEventColumn;
 export type SessionColumn = typeof sessionsSchema._.columns;
 export type SessionColumnKey = keyof SessionColumn;
+export type AuthEventFilters = z.infer<typeof authEventQuerySchema>;
+
+/*
+ * QUEUE-RELATED TYPES
+ */
+
+export const LoginPayloadSchema = z.object({
+  userId: z.string(),
+  device: z.string(),
+  loginTime: z.string(),
+});
+
+export const RegistrationPayloadSchema = z.object({
+  userId: z.string(),
+  email: z.string(),
+});
+
+export type LoginPayload = z.infer<typeof LoginPayloadSchema>;
+export type RegistrationPayload = z.infer<typeof RegistrationPayloadSchema>;
+
+type BaseAuthPayload = {
+  userId: string;
+};
+export type RegistrationCompletedPayload = BaseAuthPayload & {
+  email: string;
+};
+export type LoggedInPayload = BaseAuthPayload;
+export type RefreshTokenPayload = BaseAuthPayload;
+export type LoggedOutPayload = BaseAuthPayload;
+export type ResetPasswordRequestPayload = {
+  email: string;
+  correlationId: string;
+  userId: string;
+};
+export type EmailVerifiedPayload = BaseAuthPayload & {
+  email: string;
+};
+export type GenerateVerificationLinkPayload = BaseAuthPayload;
+
+export interface AuthJobMap {
+  [AuthJobs.RegistrationCompleted]: RegistrationCompletedPayload;
+  [AuthJobs.LoggedIn]: LoggedInPayload;
+  [AuthJobs.RefreshToken]: RefreshTokenPayload;
+  [AuthJobs.LoggedOut]: LoggedOutPayload;
+  [AuthJobs.ResetPasswordRequest]: ResetPasswordRequestPayload;
+  [AuthJobs.EmailVerified]: EmailVerifiedPayload;
+  [AuthJobs.GenerateVerificationLink]: GenerateVerificationLinkPayload;
+}
+
+/*
+ * DOCS-RELATED TYPES
+ */
+export const authResponseSchema = createJsonApiSingleResponseSchema(
+  createJsonApiResourceSchema("user", usersSelectSchema),
+);
+
+export const authTokenMetaSchema = z.object({
+  accessToken: z.string().openapi({
+    description: "JWT access signature token for authorized bearer headers.",
+  }),
+  expiresAt: z.string().datetime().openapi({
+    description: "ISO timestamp indicating session authorization expiration.",
+  }),
+  tokenType: z.literal("Bearer"),
+});

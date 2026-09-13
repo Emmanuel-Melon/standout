@@ -6,6 +6,9 @@ import type {
   ProfileWithHighlights,
 } from "./profile.types";
 
+/*
+ * SERIALIZER CONFIGURATIONS
+ */
 export const SerializedProfile: JsonApiResourceConfig<Profile> = {
   type: "profile",
   attributes: (profile: Profile) => profile,

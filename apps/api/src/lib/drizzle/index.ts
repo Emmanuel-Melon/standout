@@ -2,6 +2,7 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 
 import { dbConfig } from "@/config";
+import { combinedAuthSchema } from "@/feature/auth/auth.schema";
 import { combinedProfileSchema } from "@/feature/profile/profile.schema";
 import { combinedUsersSchema } from "@/feature/users/users.schema";
 
@@ -11,6 +12,7 @@ const pool = new Pool({
 
 export const db = drizzle(pool, {
   schema: {
+    ...combinedAuthSchema,
     ...combinedProfileSchema,
     ...combinedUsersSchema,
   },

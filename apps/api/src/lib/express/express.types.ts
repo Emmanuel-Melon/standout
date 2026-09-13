@@ -155,3 +155,54 @@ export interface WelcomeResponse {
   status: ServerStatus;
   version?: string;
 }
+
+export const baseQuerySchema = z.object({
+  page: z.coerce.number().int().positive().default(1),
+  limit: z.coerce.number().int().positive().max(100).default(10),
+  sort: z.string().optional(),
+  order: z.enum(["asc", "desc"]).default("desc"),
+  q: z.string().optional(),
+  offset: z.coerce.number().int().nonnegative().default(0),
+});
+
+export type BaseQueryParams = z.infer<typeof baseQuerySchema>;
+
+// Base type for all SSE events
+export type SSEEvent<T = any, Type extends string = string> = {
+  type: Type;
+  data?: T;
+  id?: string;
+  retry?: number;
+};
+
+// Helper type to extract the data type from an event type
+export type EventDataType<T> = T extends { type: string; data?: infer D }
+  ? D
+  : never;
+
+// Helper type to create strongly typed events
+export function createEvent<T extends string, D = any>(
+  type: T,
+  data: D,
+  options?: { id?: string; retry?: number },
+): SSEEvent<D, T> {
+  return {
+    type,
+    data,
+    id: options?.id,
+    retry: options?.retry,
+  };
+}
+export type ControllerMetadata = {
+  name: string;
+  route: string;
+  operation?: string;
+  resourceType?: string;
+  requestId: string;
+  resourceId?: string | number;
+};
+
+export type SSEOptions = {
+  headers?: Record<string, string>;
+  metadata?: ControllerMetadata;
+};
