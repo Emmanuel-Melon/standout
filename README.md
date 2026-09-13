@@ -35,3 +35,8 @@ Run from the repo root unless noted. Each app also has its own scripts — see `
 | `npm run check-types` | Turbo typecheck — only covers `packages/ui` too. Use `npm run typecheck` in `apps/web`; `apps/api` type-checks via `npm run build` (`tsc -b`). |
 
 > Lint/typecheck are **not** repo-wide. Don't run the root commands to validate the apps.
+
+## Contributors
+
+* [Emmanuel Gatwech (Eman)](https://github.com/Emmanuel-Melon)
+* [Ikwunze Kelvin (Kl3va)](https://github.com/Kl3va)

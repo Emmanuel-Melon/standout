@@ -88,7 +88,7 @@ const userPaths: PathDefinition[] = [
     security: [{ bearerAuth: [] }],
     successStatus: HttpStatus.NO_CONTENT,
     errorCodes: [401, 404],
-  }
+  },
 ];
 
 registerRoutes({

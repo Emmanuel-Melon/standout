@@ -37,7 +37,7 @@ export const healthCheck = asyncHandler(async (req: Request, res: Response) => {
 // Root route endpoint
 export const rootRoute = asyncHandler(async (req: Request, res: Response) => {
   const response: WelcomeResponse = {
-    message: "Ivyi API Server",
+    message: "Standout API Server",
     documentation: "/api-docs",
     environment: process.env.NODE_ENV || "development",
     timestamp: new Date().toISOString(),

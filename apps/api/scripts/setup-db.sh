@@ -1,17 +1,19 @@
 #!/bin/bash
 
-# Database Setup Script for Ivyi API
+# Database Setup Script for Standout API
 # This script creates the database and user for the application
 
 set -e  # Exit on any error
 
 # Database configuration
-DB_NAME="ivyi_db"
-DB_USER="ivyi_user"
-DB_PASSWORD="Suv@2024!Dev#Secure"
-DB_HOST="localhost"
-DB_PORT="5432"
-POSTGRES_USER="postgres"  # Default postgres superuser
+# Values can be overridden via environment variables (e.g. from apps/api/.env)
+DB_NAME="${DB_NAME:-standout_db}"
+DB_USER="${DB_USER:-standout_user}"
+DB_PASSWORD="${DB_PASSWORD:-St@ndout!Dev#Secure}"
+DB_PASSWORD_ENCODED="${DB_PASSWORD_ENCODED:-St%40ndout!Dev%23Secure}"
+DB_HOST="${DB_HOST:-localhost}"
+DB_PORT="${DB_PORT:-5432}"
+POSTGRES_USER="${POSTGRES_ADMIN_USER:-postgres}"  # Default postgres superuser
 
 # Colors for output
 RED='\033[0;31m'
@@ -19,7 +21,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-echo -e "${GREEN}🚀 Setting up Ivyi Database${NC}"
+echo -e "${GREEN}🚀 Setting up Standout Database${NC}"
 echo "=================================="
 
 # Check if PostgreSQL is running
@@ -84,8 +86,8 @@ else
     exit 1
 fi
 
-# Generate DATABASE_URL
-DATABASE_URL="postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
+# Generate DATABASE_URL (password is URL-encoded for .env)
+DATABASE_URL="postgres://$DB_USER:$DB_PASSWORD_ENCODED@$DB_HOST:$DB_PORT/$DB_NAME"
 
 echo ""
 echo -e "${GREEN}🎉 Database setup completed successfully!${NC}"

@@ -16,6 +16,7 @@ export const usersSelectSchema = createSelectSchema(usersSchema)
     password: true,
   })
   .extend({
+    role: z.enum(userRoleEnum.enumValues),
     sid: z.string().optional(),
   })
   .openapi({
@@ -24,10 +25,14 @@ export const usersSelectSchema = createSelectSchema(usersSchema)
       "User response schema (excluding sensitive fields like password)",
   });
 
-export const usersInsertSchema = createInsertSchema(usersSchema).openapi({
-  title: "CreateUserRequest",
-  description: "Request schema for creating a new user",
-});
+export const usersInsertSchema = createInsertSchema(usersSchema)
+  .extend({
+    role: z.enum(userRoleEnum.enumValues).optional(),
+  })
+  .openapi({
+    title: "CreateUserRequest",
+    description: "Request schema for creating a new user",
+  });
 
 export const usersUpdateSchema = usersInsertSchema
   .omit({
@@ -39,9 +44,10 @@ export const usersUpdateSchema = usersInsertSchema
     title: "UpdateUserRequest",
     description: "Request schema for updating a user",
   });
-  
+
 export const authUserSelectSchema = createSelectSchema(usersSchema)
   .extend({
+    role: z.enum(userRoleEnum.enumValues),
     sid: z.string().optional(),
   })
   .openapi({
