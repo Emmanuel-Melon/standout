@@ -5,11 +5,7 @@ import type { DbResult } from "@/lib/drizzle/drizzle.types";
 import { executeSingle } from "@/lib/drizzle/results/results.single";
 
 import { usersSchema } from "../users.schema";
-import type {
-  User,
-  UserColumn,
-  UserColumnKey,
-} from "../users.types";
+import type { User, UserColumn, UserColumnKey } from "../users.types";
 
 export const findUser = <K extends UserColumnKey>(
   field: K,

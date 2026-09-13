@@ -83,6 +83,7 @@
     "express-rate-limit": "^8.5.1",
     "glob": "^13.0.3",
     "jimp": "^1.6.0",
+    "jose": "^6.2.12",
     "jsonwebtoken": "^9.0.3",
     "jsqr": "^1.4.0",
     "multer": "^2.0.2",

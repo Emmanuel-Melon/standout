@@ -1,9 +1,6 @@
-import { relations } from "drizzle-orm";
 import {
   boolean,
   date,
-  integer,
-  jsonb,
   pgEnum,
   pgTable,
   text,
@@ -11,6 +8,11 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
+
+import { timestamps } from "@/lib/drizzle/drizzle.common";
+
+import { UserRole } from "../auth/auth.types";
+import { UserRoleValues } from "./users.config";
 
 export const userRoleEnum = pgEnum("user_role", ["admin", "user"]);
 
@@ -24,13 +26,20 @@ export const usersSchema = pgTable("users", {
   password: varchar("password", { length: 255 }),
   dob: date("dob"),
 
-  avatarUrl: varchar("avatar_url", { length: 2048 }),
+  role: text("role", {
+    enum: UserRoleValues,
+  })
+    .$type<UserRole>()
+    .notNull()
+    .default("user"),
 
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  avatarUrl: varchar("avatar_url", { length: 2048 }),
 
   isFirstLogin: boolean("is_first_login").default(true).notNull(),
   isOnboarded: boolean("is_onboarded").default(false).notNull(),
+
+  // common schema fields
+  ...timestamps,
 });
 
 export const combinedUsersSchema = {

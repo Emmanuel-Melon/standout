@@ -12,3 +12,10 @@ export const UserJobs = {
 } as const;
 
 export type UsersJobType = (typeof UserJobs)[keyof typeof UserJobs];
+
+export const UserRoles = {
+  USER: "user" as const,
+  ADMIN: "admin" as const,
+} as const;
+
+export const UserRoleValues = Object.values(UserRoles) as [string, ...string[]];

@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { z } from "zod";
 
 import { unwrap } from "@/lib/drizzle/drizzle.utils";
 import { asyncHandler } from "@/lib/express/express.async-handler";
@@ -8,10 +9,9 @@ import { HttpStatus } from "@/lib/http/http.status";
 
 import { deleteUser } from "../operations/users.delete";
 import { findUser } from "../operations/users.find";
-import { SerializedUser } from "../users.config";
 import { updateUser } from "../operations/users.update";
+import { SerializedUser } from "../users.config";
 import { usersUpdateSchema } from "../users.types";
-import { z } from "zod";
 
 export const UserControllers = {
   getUserById: asyncHandler(async (req: Request, res: Response) => {
@@ -52,7 +52,8 @@ export const UserControllers = {
       },
     });
   }),
-    updateUser: asyncHandler(async (req: Request, res: Response) => {
+  
+  updateUser: asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
     const targetUserId = Array.isArray(id) ? id[0] : id;
     const authUser = req.user!;
@@ -79,5 +80,4 @@ export const UserControllers = {
       },
     );
   }),
-
 };
