@@ -1,5 +1,20 @@
 import { RequestHandler, Router } from "express";
 
+import { UserRole } from "@/feature/auth/auth.types";
+import { TimeUnit } from "@/utils/dates";
+
+export interface RateLimitRule {
+  amount: number;
+  limit: number;
+  path: string;
+  unit: TimeUnit;
+}
+
+export interface SecurityRule {
+  path: string;
+  roles?: UserRole[];
+}
+
 export interface ApiManifest {
   isPrivate?: boolean;
   middlewares?: RequestHandler[];

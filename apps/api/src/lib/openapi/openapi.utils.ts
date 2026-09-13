@@ -1,5 +1,5 @@
 import { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
-import { z } from "zod";
+import { z, ZodTypeAny } from "zod";
 
 import {
   createJsonApiCollectionResponseSchema,
@@ -93,5 +93,26 @@ export function replaceMetadataSchema(
     data: shape.data,
     links: shape.links,
     metadata: newMetadataSchema,
+  });
+}
+
+export function crudMeta<T extends ZodTypeAny>(
+  schema: T,
+  type: "insert" | "select" | "update",
+  resource: string,
+) {
+  const titles = {
+    insert: `New${resource}`,
+    select: resource,
+    update: `Update${resource}Request`,
+  };
+  const descriptions = {
+    insert: `Request schema for creating a new ${resource.toLowerCase()}`,
+    select: `${resource} response schema`,
+    update: `Request schema for updating a ${resource.toLowerCase()}`,
+  };
+  return schema.openapi({
+    title: titles[type],
+    description: descriptions[type],
   });
 }

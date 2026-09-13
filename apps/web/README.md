@@ -1,87 +1,37 @@
-# Welcome to React Router!
+# apps/web — Standout Web
 
-A modern, production-ready template for building full-stack React applications using React Router.
+The React application for the Standout platform: a professional profile and career highlight platform. Part of the monorepo at the repo root.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## Stack
 
-## Features
+- React Router v8 in **Framework Mode** (SSR enabled)
+- React 19, TypeScript
+- Tailwind CSS v4 (via the `@tailwindcss/vite` plugin)
+- Vite 8
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+## Commands
 
-## Getting Started
+Run from `apps/web/` (or via `turbo` from the repo root). Dependencies are installed from the **repo root** (`npm install`) — this app is an npm workspace, not standalone.
 
-### Installation
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | React Router dev server with HMR — http://localhost:5173 |
+| `npm run typecheck` | `react-router typegen && tsc` (typegen output `.react-router/types/` is required by `tsc`) |
+| `npm run build` | `react-router build` — outputs to `build/` |
+| `npm run start` | Serves the production build via `react-router-serve` |
 
-Install the dependencies:
+## Project layout
 
-```bash
-npm install
-```
+- `app/root.tsx` — root layout (`ErrorBoundary`, HTML shell).
+- `app/routes.ts` — config-driven route table (not file-system routing).
+- `app/routes/` — route modules (loaders, actions, `+types`).
+- `app/app.css` — global styles (Tailwind).
 
-### Development
+## Notes
 
-Start the development server with HMR:
+- The `Dockerfile` in this directory predates the monorepo setup and will not build as-is (it expects a standalone package — don't rely on it).
+- For routing APIs, see the bundled skill at `.agents/skills/react-router/` and the installed docs in `node_modules/react-router/docs/`.
 
-```bash
-npm run dev
-```
+## Documentation
 
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+See repo-root [`README.md`](../../README.md), [`ARCHITECTURE.md`](../../ARCHITECTURE.md), and [`CONTRIBUTING.md`](../../CONTRIBUTING.md).

@@ -3,11 +3,13 @@ import dotenv from "dotenv";
 import {
   AlertsConfigSchema,
   AuthConfigSchema,
+  CookieConfigSchema,
   DatabaseConfigSchema,
   InfraConfigSchema,
   ServerConfigSchema,
   type IAlertsConfig,
   type IAuthConfig,
+  type ICookieconfig,
   type IDatabaseConfig,
   type IInfraConfig,
   type IServerConfig,
@@ -78,9 +80,44 @@ export const infraConfig = InfraConfigSchema.parse({
   },
 }) satisfies IInfraConfig;
 
+export const cookieConfig = CookieConfigSchema.parse({
+  cookieDomains: process.env.COOKIE_DOMAINS
+    ? process.env.COOKIE_DOMAINS.split(",").map((s) => s.trim())
+    : undefined,
+  cookieSecure:
+    process.env.COOKIE_SECURE === "true"
+      ? true
+      : process.env.COOKIE_SECURE === "false"
+        ? false
+        : undefined,
+  cookieSameSite: process.env.COOKIE_SAME_SITE as
+    "lax" | "strict" | "none" | undefined,
+}) satisfies ICookieconfig;
+
 export const authConfig = AuthConfigSchema.parse({
-  jwtSecret: process.env.JWT_SECRET,
-  jwtRefreshSecret: process.env.JWT_REFRESH_SECRET,
+  isProduction: process.env.NODE_ENV === "production",
+  cookieDomains: serverConfig.cookieDomains,
+  issuer: process.env.AUTH_ISSUER || "auth-service",
+  secrets: {
+    jwtSecret: process.env.JWT_SECRET ?? "dev-secret",
+    jwtRefreshSecret:
+      process.env.JWT_REFRESH_SECRET ?? process.env.JWT_SECRET ?? "dev-secret",
+    joseSecret: new TextEncoder().encode(
+      process.env.JWT_JOSE_SECRET ?? process.env.JWT_SECRET ?? "dev-secret",
+    ),
+  },
+  audience: {
+    USER: process.env.AUDIENCE_USER || "app-user",
+    ADMIN: process.env.AUDIENCE_ADMIN || "app-admin",
+  },
+  tokens: {
+    access: "access",
+    refresh: "refresh",
+  },
+  timing: {
+    accessExpiration: 60 * 60 * 1000,
+    refreshExpiration: 30 * 24 * 60 * 60 * 1000,
+  },
 }) satisfies IAuthConfig;
 
 export const alertsConfig = AlertsConfigSchema.parse({
