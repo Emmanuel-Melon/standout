@@ -1,4 +1,4 @@
-import { Request, RequestHandler, Response } from "express";
+import type { Request, RequestHandler, Response } from "express";
 import {
   extendZodWithOpenApi,
   OpenApiGeneratorV3,
@@ -7,7 +7,8 @@ import {
 import swaggerUi from "swagger-ui-express";
 import { z } from "zod";
 
-import { ivyiServers } from "@/config";
+import { standoutServers } from "@/config";
+import { profileRegistry } from "@/feature/profile/profile.docs";
 
 import { expressRegistry } from "../express/express.schema";
 
@@ -22,7 +23,7 @@ securityRegistry.registerComponent("securitySchemes", "bearerAuth", {
 });
 
 // Combine all registries
-const registries = [expressRegistry];
+const registries = [expressRegistry, profileRegistry, securityRegistry];
 
 const definitions = registries.flatMap((r) => r.definitions);
 const generator = new OpenApiGeneratorV3(definitions);
@@ -30,12 +31,12 @@ const generator = new OpenApiGeneratorV3(definitions);
 export const openApiSpec = generator.generateDocument({
   openapi: "3.0.0",
   info: {
-    title: "Ivyi Platform API",
+    title: "Standout Platform API",
     version: "1.0.0",
     description:
-      "API documentation for Ivyi - The innovative platform that changes the way we gift each other! Whether it's a birthday, graduation, wedding, or any milestone worth celebrating, Ivyi handles everything on your behalf, making gifting effortless, thoughtful, and memorable.",
+      "API documentation for Standout - The professional profile and career highlight platform.",
   },
-  servers: ivyiServers,
+  servers: standoutServers,
 });
 
 // Serve raw JSON

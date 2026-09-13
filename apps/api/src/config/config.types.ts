@@ -8,11 +8,6 @@ export const ServerEndpointsSchema = z.object({
   health: z.string().min(1, "Health check endpoint is required"),
 });
 
-export const AuthConfigSchema = z.object({
-  jwtSecret: z.string().min(1, "JWT_SECRET is required"),
-  jwtRefreshSecret: z.string().min(1, "JWT_REFRESH_SECRET is required"),
-});
-
 export const ServerConfigSchema = z.object({
   port: z.number().int().min(1).max(65535),
   env: z.string().min(1, "Environment is required"),
@@ -42,6 +37,7 @@ export const ServerConfigSchema = z.object({
       typeof val === "string" ? val.split(",").map((s) => s.trim()) : val,
     z.array(z.string().url()).default(["http://localhost:5173"]),
   ),
+  jwtSecret: z.string().optional(),
 });
 
 // Database Configuration
@@ -64,6 +60,19 @@ export const InfraConfigSchema = z.object({
   loki: LokiConfigSchema.optional(),
 });
 
+export const CookieConfigSchema = z.object({
+  cookieDomains: z.preprocess(
+    (val) =>
+      typeof val === "string" ? val.split(",").map((s) => s.trim()) : val,
+    z.array(z.string()).default(["localhost"]),
+  ),
+  cookieSecure: z.preprocess(
+    (val) => (val === "true" ? true : val === "false" ? false : undefined),
+    z.boolean().optional(),
+  ),
+  cookieSameSite: z.enum(["lax", "strict", "none"]).optional(),
+});
+
 export const AlertsConfigSchema = z.object({
   senderEmail: z.string().email().default("alerts@yourdomain.com"),
   senderName: z.string().default("System Monitor"),
@@ -73,6 +82,47 @@ export const AlertsConfigSchema = z.object({
     .default("engineering-alerts@yourdomain.com"),
 });
 
+export const AuthConfigSchema = z.object({
+  isProduction: z.boolean().default(process.env.NODE_ENV === "production"),
+  cookieDomains: z
+    .array(z.string())
+    .default(
+      process.env.COOKIE_DOMAINS?.split(",").map((s) => s.trim()) || [
+        "localhost",
+      ],
+    ),
+  issuer: z.string().default(process.env.AUTH_ISSUER || "auth-service"),
+  secrets: z.object({
+    jwtSecret: z.string(),
+    jwtRefreshSecret: z.string(),
+    joseSecret: z.instanceof(Uint8Array),
+  }),
+  audience: z
+    .object({
+      USER: z.string().default(process.env.AUDIENCE_USER || "app-user"),
+      ADMIN: z.string().default(process.env.AUDIENCE_ADMIN || "app-admin"),
+    })
+    .default({
+      USER: process.env.AUDIENCE_USER || "app-user",
+      ADMIN: process.env.AUDIENCE_ADMIN || "app-admin",
+    }),
+  tokens: z
+    .object({
+      access: z.literal("access").default("access"),
+      refresh: z.literal("refresh").default("refresh"),
+    })
+    .default({ access: "access", refresh: "refresh" }),
+  timing: z
+    .object({
+      accessExpiration: z.number().default(60 * 60 * 1000), // 1 hour in MS
+      refreshExpiration: z.number().default(30 * 24 * 60 * 60 * 1000), // 30 days in MS
+    })
+    .default({
+      accessExpiration: 60 * 60 * 1000,
+      refreshExpiration: 30 * 24 * 60 * 60 * 1000,
+    }),
+});
+
 // Type definitions
 export type IServerEndpoints = z.infer<typeof ServerEndpointsSchema>;
 export type IServerConfig = z.infer<typeof ServerConfigSchema>;
@@ -80,3 +130,4 @@ export type IDatabaseConfig = z.infer<typeof DatabaseConfigSchema>;
 export type IAuthConfig = z.infer<typeof AuthConfigSchema>;
 export type IInfraConfig = z.infer<typeof InfraConfigSchema>;
 export type IAlertsConfig = z.infer<typeof AlertsConfigSchema>;
+export type ICookieconfig = z.infer<typeof CookieConfigSchema>;

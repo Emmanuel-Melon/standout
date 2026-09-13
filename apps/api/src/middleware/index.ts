@@ -7,7 +7,7 @@ import { rawJSONDocs, swaggerSetup } from "@/lib/openapi";
 import { apiRouter } from "@/routes/api.routes";
 
 import { corsMiddleware } from "./cors";
-import { globalErrorHandler } from "./errors";
+import { globalErrorHandler } from "./http-request-errors";
 import { requestLogger } from "./http-request-logger";
 import { requestMetadata } from "./http-request-metadata";
 import { limiter } from "./rate-limiter";

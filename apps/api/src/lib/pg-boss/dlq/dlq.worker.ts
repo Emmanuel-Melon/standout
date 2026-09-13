@@ -2,23 +2,12 @@ import { DLQJobs } from ".";
 
 import { logger } from "@/lib/logger";
 import { boss, PgBossQueueName } from "@/lib/pg-boss";
-import { SystemAlerter } from "@/workflows/system/alerts";
 
 import { createPgBossWorker } from "../pgboss.core";
 import type { DLQJobMap, JobHandlerMap } from "../pgboss.types";
 
 const dlqHandlers: JobHandlerMap<DLQJobMap> = {
   [DLQJobs.DeadLetter]: async (payload) => {
-    await SystemAlerter.deadLetter({
-      originalQueue: payload.originalQueue,
-      originalJobId: payload.originalJobId,
-      event: payload.event,
-      error: payload.error,
-      retryCount: payload.retryCount,
-      failedAt: payload.failedAt,
-      correlationId: payload.correlationId,
-    });
-
     logger.fatal(
       {
         originalQueue: payload.originalQueue,
