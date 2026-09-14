@@ -7,6 +7,9 @@ import type {
   UserRole,
 } from "./auth.types";
 
+/*
+ * JOB CONFIGURATIONS & TYPES
+ */
 export const AuthJobs = {
   LoggedIn: "auth-logged-in",
   LoggedOut: "auth-logged-out",
@@ -19,6 +22,9 @@ export const AuthJobs = {
 
 export type AuthJobType = (typeof AuthJobs)[keyof typeof AuthJobs];
 
+/*
+ * AUTHENTICATION CONSTANTS
+ */
 export const AUTH_COOKIES: Record<UserRole, string> = {
   admin: "admin_accessToken",
   user: "user_accessToken",
@@ -35,8 +41,11 @@ export const AUTH_AUDIENCE = {
   ADMIN: "app-admin",
 } as const;
 
-export const AUTH_ISSUER = "ivyi-auth-service";
+export const AUTH_ISSUER = "auth-service";
 
+/*
+ * SERIALIZER CONFIGURATIONS
+ */
 export const SerializedRefreshToken: JsonApiResourceConfig<RefreshToken> = {
   type: "refreshToken",
   attributes: (payload: RefreshToken) => payload,

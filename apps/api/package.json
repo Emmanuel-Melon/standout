@@ -4,9 +4,8 @@
   "main": "index.js",
   "scripts": {
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
-    "dev": "concurrently -n \"api,stripe\" -c \"cyan,magenta\" \"npm run dev:api\" \"npm run dev:ingress\"",
+    "dev": "concurrently -n -c \"cyan,magenta\" \"npm run dev:api\"",
     "dev:api": "nodemon --exec tsx src/server.ts",
-    "dev:ingress": "chmod +x ./scripts/stripe-listen.sh && ./scripts/stripe-listen.sh",
     "build": "tsc -b && tsc-alias",
     "start": "node dist/src/server.js",
     "test": "vitest run",
@@ -44,6 +43,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/k6": "^2.2.0",
     "@types/multer": "^2.0.0",
     "@types/node": "^25.2.3",
     "@types/opossum": "^8.1.9",
@@ -86,8 +86,10 @@
     "jose": "^6.2.12",
     "jsonwebtoken": "^9.0.3",
     "jsqr": "^1.4.0",
+    "k6": "^0.0.0",
     "multer": "^2.0.2",
     "non-error": "^0.1.0",
+    "ollama": "^0.6.3",
     "opossum": "^10.0.0",
     "pdf-lib": "^1.17.1",
     "pg": "^8.18.0",
@@ -98,6 +100,7 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "uuid": "^13.0.0",
-    "zod": "^4.3.6"
+    "zod": "^4.3.6",
+    "zod-to-json-schema": "^3.25.2"
   }
 }

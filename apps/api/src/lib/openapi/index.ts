@@ -8,6 +8,7 @@ import swaggerUi from "swagger-ui-express";
 import { z } from "zod";
 
 import { standoutServers } from "@/config";
+import { authRegistry } from "@/feature/auth/auth.docs";
 import { profileRegistry } from "@/feature/profile/profile.docs";
 
 import { expressRegistry } from "../express/express.schema";
@@ -23,7 +24,12 @@ securityRegistry.registerComponent("securitySchemes", "bearerAuth", {
 });
 
 // Combine all registries
-const registries = [expressRegistry, profileRegistry, securityRegistry];
+const registries = [
+  authRegistry,
+  expressRegistry,
+  profileRegistry,
+  securityRegistry,
+];
 
 const definitions = registries.flatMap((r) => r.definitions);
 const generator = new OpenApiGeneratorV3(definitions);

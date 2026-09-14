@@ -4,7 +4,7 @@ import {
   HttpLocation,
   validateHttpRequest,
 } from "@/middleware/http-request-validator";
-import { useAuthentication } from "@/routes/api.rules";
+import { useAuthentication } from "@/routes/api.access";
 import type { ApiManifest } from "@/routes/api.types";
 
 import { loginRequestSchema, registerRequestSchema } from "./auth.types";

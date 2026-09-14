@@ -1,8 +1,12 @@
+import { Router } from "express";
+
+import { authApi } from "@/feature/auth/auth.routes";
 import { usersApi } from "@/feature/users/users.routes";
 
 import { useApiRouters } from "./api.access";
-import { apiRouter } from "./api.routes";
 
-useApiRouters(apiRouter, [usersApi]);
+const apiRouter = Router();
+
+useApiRouters(apiRouter, [usersApi, authApi]);
 
 export default apiRouter;

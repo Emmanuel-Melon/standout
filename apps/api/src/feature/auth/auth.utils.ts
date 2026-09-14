@@ -12,8 +12,6 @@ export const comparePasswords = async (
   return await bcrypt.compare(plainPassword, hashedPassword);
 };
 
-export const checkUserRole = (
-  role: string,
-): role is "admin" | "user" => {
+export const checkUserRole = (role: string): role is "admin" | "user" => {
   return role === "admin" || role === "user";
 };

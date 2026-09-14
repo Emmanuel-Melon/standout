@@ -5,7 +5,7 @@ import { sendSuccessResponse } from "@/lib/express/express.response";
 import { HttpError } from "@/lib/http/http.error";
 import { HttpStatus } from "@/lib/http/http.status";
 
-import { AUTH_COOKIES, AuthJobs } from "../auth.config";
+import { AUTH_COOKIES } from "../auth.config";
 import { getCookieOptions } from "../auth.cookies";
 import { findActiveSession } from "../operations/auth.find";
 import { revokeSession } from "../operations/auth.update";

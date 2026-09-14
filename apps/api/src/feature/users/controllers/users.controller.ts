@@ -52,7 +52,7 @@ export const UserControllers = {
       },
     });
   }),
-  
+
   updateUser: asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
     const targetUserId = Array.isArray(id) ? id[0] : id;

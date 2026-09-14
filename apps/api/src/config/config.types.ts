@@ -123,6 +123,32 @@ export const AuthConfigSchema = z.object({
     }),
 });
 
+export const OllamaConfigSchema = z.object({
+  url: z.string().url("Ollama URL must be a valid URL"),
+  model: z.string().optional(),
+});
+
+export const StorageConfigSchema = z.object({
+  dir: z.string().min(1, "Storage directory is required"),
+  maxUploadMb: z.number().int().positive(),
+});
+
+export const embeddingConfigSchema = z.object({
+  model: z.string().default("nomic-embed-text"),
+  dimensions: z.coerce.number().default(768),
+  ollamaBaseUrl: z.string().default("http://localhost:11434"),
+  // "chroma" | "pgvector" | "dual" — dual writes both, reads from primaryStore
+  writeMode: z.enum(["chroma", "pgvector", "dual"]).default("pgvector"),
+  primaryStore: z.enum(["chroma", "pgvector"]).default("pgvector"),
+  // How often (ms) the shadow-write replay job runs when writeMode is "dual"
+  replayIntervalMs: z.coerce.number().int().positive().default(300_000),
+});
+
+// Grouped Schemas
+export const LLMConfigSchema = z.object({
+  ollama: OllamaConfigSchema,
+});
+
 // Type definitions
 export type IServerEndpoints = z.infer<typeof ServerEndpointsSchema>;
 export type IServerConfig = z.infer<typeof ServerConfigSchema>;
@@ -131,3 +157,7 @@ export type IAuthConfig = z.infer<typeof AuthConfigSchema>;
 export type IInfraConfig = z.infer<typeof InfraConfigSchema>;
 export type IAlertsConfig = z.infer<typeof AlertsConfigSchema>;
 export type ICookieconfig = z.infer<typeof CookieConfigSchema>;
+export type IOllamaConfig = z.infer<typeof OllamaConfigSchema>;
+export type IStorageConfig = z.infer<typeof StorageConfigSchema>;
+export type IEmbeddingConfig = z.infer<typeof embeddingConfigSchema>;
+export type ILLMConfig = z.infer<typeof LLMConfigSchema>;

@@ -5,8 +5,12 @@ import {
   AuthConfigSchema,
   CookieConfigSchema,
   DatabaseConfigSchema,
+  ILLMConfig,
   InfraConfigSchema,
+  IStorageConfig,
+  LLMConfigSchema,
   ServerConfigSchema,
+  StorageConfigSchema,
   type IAlertsConfig,
   type IAuthConfig,
   type ICookieconfig,
@@ -127,12 +131,32 @@ export const alertsConfig = AlertsConfigSchema.parse({
     process.env.ENGINEERING_ALERTS_EMAIL ?? "engineering-alerts@yourdomain.com",
 }) satisfies IAlertsConfig;
 
+// LLM Configuration
+export const llmConfig = LLMConfigSchema.parse({
+  ollama: {
+    url: process.env.OLLAMA_URL || "http://localhost:11434",
+    model: process.env.OLLAMA_MODEL,
+  },
+  gemini: {
+    apiKey: process.env.GEMINI_API_KEY,
+    model: process.env.GEMINI_MODEL || "gemini-pro",
+  },
+}) satisfies ILLMConfig;
+
+// Storage Configuration
+export const storageConfig = StorageConfigSchema.parse({
+  dir: process.env.UPLOADS_DIR || "uploads",
+  maxUploadMb: Number(process.env.MAX_UPLOAD_MB) || 25,
+}) satisfies IStorageConfig;
+
 const config = {
   alerts: alertsConfig,
   auth: authConfig,
   db: dbConfig,
   infrastructure: infraConfig,
   server: serverConfig,
+  llm: llmConfig,
+  storage: storageConfig,
 };
 
 // Export everything

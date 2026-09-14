@@ -4,7 +4,7 @@ import swaggerUi from "swagger-ui-express";
 
 import { healthCheck, rootRoute } from "@/lib/express";
 import { rawJSONDocs, swaggerSetup } from "@/lib/openapi";
-import { apiRouter } from "@/routes/api.routes";
+import apiRouter from "@/routes";
 
 import { corsMiddleware } from "./cors";
 import { globalErrorHandler } from "./http-request-errors";
