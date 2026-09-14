@@ -62,14 +62,14 @@ The API serves its OpenAPI spec at `http://localhost:3000/api-docs`.
 
 ## Verifying your work
 
-| Check | Where | Command |
-| --- | --- | --- |
-| API build (type-checks too) | `apps/api` | `npm run build` |
-| Web typecheck (typegen + `tsc`) | `apps/web` | `npm run typecheck` |
-| Unit tests | `apps/api` | `npm run test:unit` |
-| Integration tests (need `.env.test`) | `apps/api` | `npm run test:integration` |
-| Lint | `packages/ui` only | `npm run lint` (root) |
-| Formatting | roots | `npm run format` (root) |
+| Check                                | Where              | Command                    |
+| ------------------------------------ | ------------------ | -------------------------- |
+| API build (type-checks too)          | `apps/api`         | `npm run build`            |
+| Web typecheck (typegen + `tsc`)      | `apps/web`         | `npm run typecheck`        |
+| Unit tests                           | `apps/api`         | `npm run test:unit`        |
+| Integration tests (need `.env.test`) | `apps/api`         | `npm run test:integration` |
+| Lint                                 | `packages/ui` only | `npm run lint` (root)      |
+| Formatting                           | roots              | `npm run format` (root)    |
 
 > The root `npm run lint` and `npm run check-types` only cover `packages/ui` — they won't validate the apps. API type safety is caught by `npm run build`; web by `npm run typecheck`.
 

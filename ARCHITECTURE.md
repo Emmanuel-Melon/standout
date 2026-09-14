@@ -18,12 +18,12 @@ packages/
 
 `apps/api` and `apps/web` do **not** share code today (`@repo/*` packages are unused by them), and each has its own aliases and configs:
 
-| | `apps/api` | `apps/web` |
-| --- | --- | --- |
-| Alias | `@/*` → `src/*` | `~/*` → `app/*` |
-| Formatter | own `.prettierrc` (import sort) | none |
-| Typecheck | none (`build` = `tsc -b`) | `npm run typecheck` (typegen + `tsc`) |
-| Lint | none | none |
+|           | `apps/api`                      | `apps/web`                            |
+| --------- | ------------------------------- | ------------------------------------- |
+| Alias     | `@/*` → `src/*`                 | `~/*` → `app/*`                       |
+| Formatter | own `.prettierrc` (import sort) | none                                  |
+| Typecheck | none (`build` = `tsc -b`)       | `npm run typecheck` (typegen + `tsc`) |
+| Lint      | none                            | none                                  |
 
 ## apps/api — the Express application
 
@@ -77,15 +77,15 @@ React Router v8 in **Framework Mode** (SSR on), Vite 8 and Tailwind CSS v4 via t
 
 A feature lives in `apps/api/src/feature/<feature>/` and is built from these pieces:
 
-| File | Responsibility |
-| --- | --- |
-| `<feature>.schema.ts` | Drizzle `pgTable`/`pgEnum` definitions. Export a combined object (e.g. `combinedUsersSchema`) to merge into `drizzle/index.ts`. |
-| `<feature>.types.ts` | `createInsertSchema`/`createSelectSchema` (drizzle-zod) with `.openapi()` decorators, `z.infer` types, and `openapi()`-decorated request/response models. |
-| `<feature>.config.ts` | Serializer config (`JsonApiResourceConfig`) used by responses, plus job names/contracts. |
-| `<feature>.routes.ts` | Express `Router` with per-route validation via `validateHttpRequest(schema, HttpLocation.X)`; exports the `ApiManifest`. |
-| `controllers/` | Thin async-handler controllers: parse params, call operations, `unwrap()` not-found, reply with `sendSuccessResponse()`/`sendErrorResponse()` (gives JSON:API-shaped responses). |
-| `operations/` | Pure Drizzle queries returning `DbResult<T>` (e.g. `findUser` over `db.query.usersSchema.findFirst`). Keep DB access here, not in controllers. |
-| `<feature>.docs.ts` | `OpenAPIRegistry`: `defineApiResource` + `registerJsonApiSchemas` for the resource, `registerRoutes` for each path. |
+| File                  | Responsibility                                                                                                                                                                   |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<feature>.schema.ts` | Drizzle `pgTable`/`pgEnum` definitions. Export a combined object (e.g. `combinedUsersSchema`) to merge into `drizzle/index.ts`.                                                  |
+| `<feature>.types.ts`  | `createInsertSchema`/`createSelectSchema` (drizzle-zod) with `.openapi()` decorators, `z.infer` types, and `openapi()`-decorated request/response models.                        |
+| `<feature>.config.ts` | Serializer config (`JsonApiResourceConfig`) used by responses, plus job names/contracts.                                                                                         |
+| `<feature>.routes.ts` | Express `Router` with per-route validation via `validateHttpRequest(schema, HttpLocation.X)`; exports the `ApiManifest`.                                                         |
+| `controllers/`        | Thin async-handler controllers: parse params, call operations, `unwrap()` not-found, reply with `sendSuccessResponse()`/`sendErrorResponse()` (gives JSON:API-shaped responses). |
+| `operations/`         | Pure Drizzle queries returning `DbResult<T>` (e.g. `findUser` over `db.query.usersSchema.findFirst`). Keep DB access here, not in controllers.                                   |
+| `<feature>.docs.ts`   | `OpenAPIRegistry`: `defineApiResource` + `registerJsonApiSchemas` for the resource, `registerRoutes` for each path.                                                              |
 
 Request flow: route (`validateHttpRequest` puts parsed data on `req.validated`) → controller → operation → `DbResult` → `unwrap` → `sendSuccessResponse`.
 
