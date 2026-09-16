@@ -6,12 +6,22 @@
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc"
+    "typecheck": "react-router typegen && tsc",
+    "generate:types": "openapi-typescript $VITE_API_BASE_URL/api-docs.json -o app/lib/api/generated/api.types.ts || echo 'Type generation failed - check if backend is running'",
+    "generate:types:local": "VITE_API_BASE_URL=http://localhost:3000 npm run generate:types",
+    "generate:types:safe": "openapi-typescript $VITE_API_BASE_URL/api-docs.json -o app/lib/api/generated/api.types.ts 2>/dev null || true",
+    "generate:zod": "openapi-zod-client http://localhost:3000/api-docs.json --output app/lib/api/generated/api.schemas.ts",
+    "format": "npx prettier --write app"
   },
   "dependencies": {
     "@react-router/node": "^8",
     "@react-router/serve": "^8",
+    "@tanstack/react-query": "^5.103.1",
+    "@tanstack/react-query-devtools": "^5.103.1",
+    "axios": "^1.20.0",
     "isbot": "^5.1.36",
+    "openapi-typescript": "^7.13.0",
+    "openapi-zod-client": "^1.18.3",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-router": "^8"
