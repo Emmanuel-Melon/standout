@@ -13,12 +13,12 @@ The React application for the Standout platform: a professional profile and care
 
 Run from `apps/web/` (or via `turbo` from the repo root). Dependencies are installed from the **repo root** (`npm install`) — this app is an npm workspace, not standalone.
 
-| Command | What it does |
-| --- | --- |
-| `npm run dev` | React Router dev server with HMR — http://localhost:5173 |
+| Command             | What it does                                                                               |
+| ------------------- | ------------------------------------------------------------------------------------------ |
+| `npm run dev`       | React Router dev server with HMR — http://localhost:5173                                   |
 | `npm run typecheck` | `react-router typegen && tsc` (typegen output `.react-router/types/` is required by `tsc`) |
-| `npm run build` | `react-router build` — outputs to `build/` |
-| `npm run start` | Serves the production build via `react-router-serve` |
+| `npm run build`     | `react-router build` — outputs to `build/`                                                 |
+| `npm run start`     | Serves the production build via `react-router-serve`                                       |
 
 ## Project layout
 
