@@ -1,4 +1,5 @@
 import { Request, Response, type CookieOptions } from "express";
+import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -13,6 +14,8 @@ import { crudMeta } from "@/lib/openapi/openapi.utils";
 import { usersSelectSchema } from "../users/users.types";
 import { AuthJobs } from "./auth.config";
 import { authEventsSchema, sessionsSchema } from "./auth.schema";
+
+extendZodWithOpenApi(z);
 
 /*
  * DRIZZLE-GENERATED SCHEMAS (from PostgreSQL tables)
