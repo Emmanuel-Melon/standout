@@ -9,7 +9,9 @@ import { z } from "zod";
 
 import { standoutServers } from "@/config";
 import { authRegistry } from "@/feature/auth/auth.docs";
+import { intentRegistry } from "@/feature/intent/intent.docs";
 import { profileRegistry } from "@/feature/profile/profile.docs";
+import { usersRegistry } from "@/feature/users/users.docs";
 
 import { expressRegistry } from "../express/express.schema";
 
@@ -27,8 +29,10 @@ securityRegistry.registerComponent("securitySchemes", "bearerAuth", {
 const registries = [
   authRegistry,
   expressRegistry,
+  intentRegistry,
   profileRegistry,
   securityRegistry,
+  usersRegistry,
 ];
 
 const definitions = registries.flatMap((r) => r.definitions);

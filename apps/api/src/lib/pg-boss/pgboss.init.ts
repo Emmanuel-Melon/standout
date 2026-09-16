@@ -1,3 +1,4 @@
+import { initIntentWorker } from "@/feature/intent/jobs/intent.worker";
 import { logger } from "@/lib/logger";
 
 import { initDLQWorker } from "./dlq/dlq.worker";
@@ -5,6 +6,9 @@ import { boss, PgBossQueueName } from "./index";
 
 export const initPgBossQueues = async () => {
   await Promise.all([
+    // Intent Queue
+    boss.createQueue(PgBossQueueName.IntentQueue),
+
     // Dead Letter Queue
     boss.createQueue(PgBossQueueName.DeadLetterQueue),
   ]);
@@ -14,6 +18,9 @@ export const initPgBossQueues = async () => {
 
 export const initPgBossWorkers = async () => {
   const workers = [
+    // Intent Queue
+    initIntentWorker(),
+
     // Dead Letter Queue
     initDLQWorker(),
   ];

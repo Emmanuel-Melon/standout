@@ -10,6 +10,9 @@ export enum PgBossQueueName {
   NotificationsQueue = "notifications-queue",
   PushNotificationsQueue = "push-notifications-queue",
 
+  // Intent Queue
+  IntentQueue = "intent-queue",
+
   // Dead Letter Queue
   DeadLetterQueue = "dead-letter-queue",
 }
